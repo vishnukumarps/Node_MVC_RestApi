@@ -17,9 +17,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/bookstore', {
 
 mongoose.Promise = global.Promise;
 
-
 app.use('/book',bookRouter);
 app.use('/feedback',feedbackRouter);
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening on port port!`))
+
+exports.app = app;
