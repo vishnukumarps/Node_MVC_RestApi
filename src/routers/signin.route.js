@@ -3,11 +3,11 @@ const router = express.Router();
 const signInController = require('../controllers/signin.controller');
 
 
-router.post('/login', signInController.login);
+router.post('/anonymousLogin', signInController.anonymousLogin);
 router.post('/logout', signInController.logout);
 router.post('/signup', signInController.signup);
-router.post('/loginWithEmail', signInController.loginWithEmail);
-router.post('/anonymousUserLink', signInController.anonymousUserLink);
-router.get('/currentUser', signInController.currentUser);
+router.post('/login', signInController.login);
+router.post('/anonymousToOfficial', signInController.anonymousToOfficial);
+router.get('/logedInUser', signInController.logedInUser);
 
 module.exports = router;

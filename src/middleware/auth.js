@@ -8,14 +8,10 @@ async function auth(req, res, next) {
     var currentUser = await app.currentUser;
     console.log("currentUser", currentUser.id);
     if (currentUser.id==userId) {
-        console.log(currentUser.profile);
-        console.log(currentUser.identities);
-        console.log(currentUser.state);
         console.log("user is authenticated");
         next();
     }
     else {
-        
         console.log("user is not authenticated");
         res.send("user is not authenticated");
     }

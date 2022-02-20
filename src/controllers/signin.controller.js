@@ -3,40 +3,23 @@ const Realm = require("realm");
 
 const app = new Realm.App({ id: "hope-xggeh" });
 
-async function login(req, res, next) {
+async function anonymousLogin(req, res, next) {
     // Create an anonymous credential
     const credentials = Realm.Credentials.anonymous();
     try {
         const user = await app.logIn(credentials);
+        var userObj = {
+            id: user.id,
+            email: user.profile.email,
+            identities: user.identities,
+            state: user.state
+        }
         console.log("Successfully logged in!", user.id);
-        //await app.currentUser.logOut();
-        res.send(user.id);
+        console.dir(userObj);
+        res.send(userObj);
     } catch (err) {
         console.error("Failed to log in", err.message);
-    }
-}
-
-async function currentUser(req, res, next) {
-    var logedInUser = await app.currentUser;
-    var resultObj = {
-        id: logedInUser.id,
-        email: logedInUser.profile.email,
-        identities: logedInUser.identities,
-        state: logedInUser.state
-    }
-    console.log("Current User" + resultObj);
-    res.send(resultObj);
-}
-
-async function logout(req, res, next) {
-    try {
-        var currentUser = await app.currentUser;
-        await app.currentUser.logOut();
-        console.log("Successfully logged out!");
-        res.send(currentUser.id + " logged out successfully");
-    } catch (err) {
-        console.error("Failed to log out", err.message);
-        res.send("failed to log out" + err.message);
+        res.send("failed to log in" + err.message);
     }
 }
 
@@ -55,25 +38,58 @@ async function signup(req, res, next) {
             req.body.password
         );
         const user = await app.logIn(credentials);
+        userObj = {
+            id: user.id,
+            email: user.profile.email,
+            identities: user.identities,
+            state: user.state,
+            msg: user.profile.email + " is successfully registered"
+        }
         console.log("Successfully logged in!", user.id);
-        res.send(user.id);
+        console.dir(userObj);
+        res.send(userObj);
     }
     catch (err) {
         console.log(err.message)
+        res.send(err.message);
     }
 }
 
-async function loginWithEmail(req, res, next) {
-    const credentials = Realm.Credentials.emailPassword(
-        req.body.email,
-        req.body.password
-    );
-
-    const user = await app.logIn(credentials);
-    console.log("Successfully logged in!", user.id);
-    res.send(user.id);
+async function logedInUser(req, res, next) {
+    var logedInUser = await app.currentUser;
+    var resultObj = {
+        id: logedInUser.id,
+        email: logedInUser.profile.email,
+        identities: logedInUser.identities,
+        state: logedInUser.state
+    }
+    console.log("Current User" + resultObj);
+    res.send(resultObj);
 }
-async function anonymousUserLink(req, res, next) {
+
+async function login(req, res, next) {
+    try {
+        const credentials = Realm.Credentials.emailPassword(
+            req.body.email,
+            req.body.password
+        );
+        const user = await app.logIn(credentials);
+        console.log("Successfully logged in!", user.id);
+        var userObj = {
+            id: user.id,
+            email: user.profile.email,
+            identities: user.identities,
+            state: user.state,
+            msg: user.profile.email + " is successfully logged in"
+        }
+        console.dir(userObj);
+        res.send(userObj);
+    } catch (error) {
+        console.log(error.message);
+        res.send(error.message);
+    }
+}
+async function anonymousToOfficial(req, res, next) {
 
     try {
         var anonymousUser = await app.currentUser;
@@ -112,7 +128,7 @@ async function anonymousUserLink(req, res, next) {
             anonymousUser: anonymousObj,
             officialUser: officialUserObj
         }
-        console.dir( finalObj);
+        console.dir(finalObj);
         res.send(finalObj);
 
     } catch (err) {
@@ -121,12 +137,33 @@ async function anonymousUserLink(req, res, next) {
     }
 }
 
-module.exports = {
-    login,
-    logout,
-    signup,
-    loginWithEmail,
-    anonymousUserLink,
-    currentUser
+async function logout(req, res, next) {
+    try {
+        var currentUser = await app.currentUser;
+        var userObj = {
+            id: currentUser.id,
+            email: currentUser.profile.email,
+            identities: currentUser.identities,
+            state: currentUser.state,
+            msg: currentUser.id + " is successfully logged out"
+        }
+        await app.currentUser.logOut();
+        
+        console.log("Successfully logged out!");
+        userObj.state=currentUser.state;
+        res.send(userObj);
+    } catch (err) {
+        console.error("Failed to log out", err.message);
+        res.send("failed to log out" + err.message);
+    }
+}
 
+
+module.exports = {
+    anonymousLogin,
+    signup,
+    login,
+    anonymousToOfficial,
+    logedInUser,
+    logout
 };
