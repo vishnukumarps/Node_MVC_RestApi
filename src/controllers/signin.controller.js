@@ -33,7 +33,7 @@ async function logout(req, res, next) {
         var currentUser = await app.currentUser;
         await app.currentUser.logOut();
         console.log("Successfully logged out!");
-        res.send(currentUser.id+" logged out successfully");
+        res.send(currentUser.id + " logged out successfully");
     } catch (err) {
         console.error("Failed to log out", err.message);
         res.send("failed to log out" + err.message);
@@ -78,10 +78,11 @@ async function loginWithEmail(req, res, next) {
 async function anonymousUserLink(req, res, next) {
 
     try {
-       // var currentAnonymousUser = await app.currentUser.
-     //   console.log(currentAnonymousUser.id);
-        const anonymousUser = await app.logIn(Realm.Credentials.anonymous());
-        console.log("Successfully logged in!", anonymousUser.id);
+        var anonymousUser = await app.currentUser;
+            console.log("Current Anonymoususer" + anonymousUser.id);
+
+        // const anonymousUser = await app.logIn(Realm.Credentials.anonymous());
+        // console.log("Successfully logged in!", anonymousUser.id);
         await app.emailPasswordAuth.registerUser(
             {
                 email: req.body.email,
@@ -92,13 +93,13 @@ async function anonymousUserLink(req, res, next) {
         const emailPasswordUserCredentials = Realm.Credentials.emailPassword(
             req.body.email,
             req.body.password
-          );
+        );
 
-        const officialUser= await anonymousUser.linkCredentials(
-          emailPasswordUserCredentials   
+        const officialUser = await anonymousUser.linkCredentials(
+            emailPasswordUserCredentials
         );
         console.log("Successfully logged in!", officialUser.id);
-     
+
     } catch (err) {
         console.log(err.message)
         res.send(err.message);
