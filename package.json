@@ -2,8 +2,9 @@
   "name": "mvc-restapi",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "./src/app.js",
   "scripts": {
+    "start": "node ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +14,9 @@
     "express": "^4.17.1",
     "mongodb": "^4.0.0",
     "mongoose": "^5.13.2",
-    "nodemon": "^2.0.12",
     "realm": "^10.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
