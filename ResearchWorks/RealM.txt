@@ -1,0 +1,53 @@
+https://docs.mongodb.com/realm/sdk/node/quick-start/
+https://docs.mongodb.com/realm-sdks/js/latest/Realm.User.html#logOut
+
+======================================
+https://stackoverflow.com/questions/62316114/do-i-understand-mongodb-realm-correctly
+https://www.mongodb.com/community/forums/t/can-i-able-to-use-realm-only-for-user-authentication/8854/2
+
+
+This is it
+https://docs.mongodb.com/realm/sdk/dotnet/advanced-guides/link-user-identities/#std-label-dotnet-link-user-identities
+https://docs.mongodb.com/realm/sdk/node/advanced/link-identities/
+
+
+https://docs.mongodb.com/realm/tutorial/
+https://docs.mongodb.com/realm/tutorial/jwt/
+
+https://www.youtube.com/watch?v=lqo0Yf7lnyg
+
+
+
+Prerequest
+=============
+https://www.youtube.com/watch?v=fbYExfeFsI0&list=PL4RCxklHWZ9tRqdFK5YqoX3ju-Hk23Btu
+https://docs.mongodb.com/realm/sdk/node/quick-start/
+Steps
+npm i -g mongodb-realm-cli
+
+publicKey
+ordsemvp
+
+private key
+339203a2-3cfe-4817-9887-cd08d84ce377
+
+
+https://github.com/mongodb-university/realm-tutorial-backend.git
+
+https://github.com/vishnukumarps/realm-tutorial-backend.git
+
+realm-cli push
+
+
+
+
+npm i -g mongodb-realm-cli
+
+realm-cli login --api-key ordsemvp --private-api-key 339203a2-3cfe-4817-9887-cd08d84ce377
+=================================================================================================
+
+
+
+React Native
+
+https://www.linkedin.com/pulse/build-offline-first-mobile-application-using-mongodb-realm-kambam

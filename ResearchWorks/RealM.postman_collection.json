@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "fa5c6236-76c1-49da-9b65-59caa2fe0dd9",
+		"name": "RealM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SignUp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"vishnu111@gmail.com\",\r\n    \"password\":\"Vishnu@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/signin/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signin",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AnonymousLogin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/signin/anonymousLogin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signin",
+						"anonymousLogin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/signin/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signin",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCurrentUser",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/signin/logedInUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signin",
+						"logedInUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddBook",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "userid",
+						"value": "62126066facf25cbe2347af0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Harry Potter\",\r\n    \"price\":900\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/book/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"book",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"vishnu111@gmail.com\",\r\n    \"password\":\"Vishnu@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/signin/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signin",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AnonymousToOfficial",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"vishnu1@gmail.com\",\r\n    \"password\":\"Vishnu@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/signin/anonymousToOfficial",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signin",
+						"anonymousToOfficial"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
