@@ -18,8 +18,6 @@ const post = async (req, res, next) => {
         res.send(error)
     }
 };
-
-
 module.exports = {
     get,
     post
