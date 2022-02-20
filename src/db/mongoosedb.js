@@ -1,5 +1,5 @@
 
-mongoose.connect('mongodb://127.0.0.1:27017/bookstore', {
+mongoose.connect('mongodb+srv://root:root@cluster0.j9w2i.mongodb.net/test', {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology:true
