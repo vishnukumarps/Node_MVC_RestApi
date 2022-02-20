@@ -8,5 +8,6 @@ router.post('/logout', signInController.logout);
 router.post('/signup', signInController.signup);
 router.post('/loginWithEmail', signInController.loginWithEmail);
 router.post('/anonymousUserLink', signInController.anonymousUserLink);
+router.get('/currentUser', signInController.currentUser);
 
 module.exports = router;
