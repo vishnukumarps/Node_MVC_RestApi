@@ -1,21 +1,29 @@
 const Realm = require("realm");
 const app = new Realm.App({ id: "hope-xggeh" });
+const jwt_decode = require('jwt-decode');
 
 async function auth(req, res, next) {
-    console.log(req.headers);
-    var userId= req.headers.userid;
-    console.log("userId", userId);
-    var currentUser = await app.currentUser;
-    console.log("currentUser", currentUser.id);
-    if (currentUser.id==userId) {
-        console.log("user is authenticated");
-        next();
+    try {
+        const token = req.header('Authorization').replace('Bearer ', '')
+        var decoded = jwt_decode(token);
+        console.log("decoded", decoded.sub);
+        var userId = decoded.sub;
+
+        var currentUser = await app.currentUser;
+        console.log("currentUser", currentUser.id);
+        if (currentUser.id == userId) {
+            console.log("user is authenticated");
+            next();
+        }
+        else {
+            console.log("user is not authenticated");
+            res.send("user is not authenticated");
+        }
+    } catch (error) {
+        console.log(error);
+        res.send(error.meassage);
     }
-    else {
-        console.log("user is not authenticated");
-        res.send("user is not authenticated");
-    }
-  
+
 }
 
 module.exports = {

@@ -2,6 +2,7 @@
 const Realm = require("realm");
 
 const app = new Realm.App({ id: "hope-xggeh" });
+const jwt_decode = require('jwt-decode');
 
 async function anonymousLogin(req, res, next) {
     // Create an anonymous credential
@@ -74,14 +75,21 @@ async function login(req, res, next) {
             req.body.password
         );
         const user = await app.logIn(credentials);
+        var token=user.refreshToken;
+        var decoded = jwt_decode(token);
+        console.log("decoded", decoded.sub);
+        console.log(token);
         console.log("Successfully logged in!", user.id);
         var userObj = {
             id: user.id,
             email: user.profile.email,
             identities: user.identities,
             state: user.state,
+            token:token,
+            decoded:decoded,
             msg: user.profile.email + " is successfully logged in"
         }
+        user.id
         console.dir(userObj);
         res.send(userObj);
     } catch (error) {

@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "jwt-decode": "^3.1.2",
     "mongodb": "^4.0.0",
     "mongoose": "^5.13.2",
     "realm": "^10.13.0"
