@@ -1,8 +1,10 @@
 
 const Realm = require("realm");
 
-const app = new Realm.App({ id: "hope-xggeh" });
+//const app = new Realm.App({ id: "hope-xggeh" });
+const app = new Realm.App({ id: "application-0-cjmsl" });
 const jwt_decode = require('jwt-decode');
+const res = require("express/lib/response");
 
 async function anonymousLogin(req, res, next) {
     // Create an anonymous credential
@@ -11,9 +13,9 @@ async function anonymousLogin(req, res, next) {
         const user = await app.logIn(credentials);
         var userObj = {
             id: user.id,
-            email: user.profile.email,
             identities: user.identities,
-            state: user.state
+            state: user.state,
+            refreshToken: user.refreshToken
         }
         console.log("Successfully logged in!", user.id);
         console.dir(userObj);
@@ -75,7 +77,7 @@ async function login(req, res, next) {
             req.body.password
         );
         const user = await app.logIn(credentials);
-        var token=user.refreshToken;
+        var token = user.refreshToken;
         var decoded = jwt_decode(token);
         console.log("decoded", decoded.sub);
         console.log(token);
@@ -85,8 +87,8 @@ async function login(req, res, next) {
             email: user.profile.email,
             identities: user.identities,
             state: user.state,
-            token:token,
-            decoded:decoded,
+            token: token,
+            decoded: decoded,
             msg: user.profile.email + " is successfully logged in"
         }
         user.id
@@ -105,7 +107,8 @@ async function anonymousToOfficial(req, res, next) {
             id: anonymousUser.id,
             email: anonymousUser.profile.email,
             identities: anonymousUser.identities,
-            state: anonymousUser.state
+            state: anonymousUser.state,
+            refreshToken: anonymousUser.refreshToken
         }
         console.log("Current Anonymoususer" + anonymousObj);
         // const anonymousUser = await app.logIn(Realm.Credentials.anonymous());
@@ -128,7 +131,8 @@ async function anonymousToOfficial(req, res, next) {
             id: officialUser.id,
             email: officialUser.profile.email,
             identities: officialUser.identities,
-            state: officialUser.state
+            state: officialUser.state,
+            refreshToken: officialUser.refreshToken
         }
         console.log("Successfully logged in!", officialUser.id);
 
@@ -156,13 +160,63 @@ async function logout(req, res, next) {
             msg: currentUser.id + " is successfully logged out"
         }
         await app.currentUser.logOut();
-        
+
         console.log("Successfully logged out!");
-        userObj.state=currentUser.state;
+        userObj.state = currentUser.state;
         res.send(userObj);
     } catch (err) {
         console.error("Failed to log out", err.message);
         res.send("failed to log out" + err.message);
+    }
+}
+
+async function sendResetPasswordEmail(req, res, next) {
+    // The user's email address
+    try {
+        var result = await app.emailPasswordAuth.sendResetPasswordEmail(req.body.email);
+        console.log(result);
+        res.send("Password reset email sent");
+    } catch (error) {
+        console.log(error.message);
+        res.send(error.message);
+    }
+
+
+    // try {
+    //     const email = req.body.email;
+    //     // The new password to use
+    //     const password = req.body.password;
+    //     // Additional arguments for the reset function
+    //     const args = [];
+    //     await app.emailPasswordAuth.callResetPasswordFunction(
+    //         { email, password },
+    //         args
+    //     );
+    //     console.log("Successfully reset password!");
+    //     res.send("Successfully reset password!");
+
+    // } catch (error) {
+    //     console.log(error.message);
+    //     res.send(error.message);
+    // }
+}
+
+async function  resetPassword(req, res, next) {
+    try {
+        var resetDetails = {
+            token: req.body.token,
+            tokenId: req.body.tokenId,
+            password: req.body.newPassword
+        }
+        console.log(resetDetails);
+
+        var result = await app.emailPasswordAuth.resetPassword(
+            resetDetails
+        );
+        res.send("Password reset successfully");
+    } catch (error) {
+        console.log(error.message);
+        res.send(error.message);
     }
 }
 
@@ -173,5 +227,7 @@ module.exports = {
     login,
     anonymousToOfficial,
     logedInUser,
-    logout
+    logout,
+    sendResetPasswordEmail,
+    resetPassword
 };

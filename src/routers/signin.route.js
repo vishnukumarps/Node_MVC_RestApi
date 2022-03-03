@@ -9,5 +9,7 @@ router.post('/signup', signInController.signup);
 router.post('/login', signInController.login);
 router.post('/anonymousToOfficial', signInController.anonymousToOfficial);
 router.get('/logedInUser', signInController.logedInUser);
+router.post('/resetPassword', signInController.resetPassword);
+router.post('/sendResetPasswordEmail', signInController.sendResetPasswordEmail);
 
 module.exports = router;
