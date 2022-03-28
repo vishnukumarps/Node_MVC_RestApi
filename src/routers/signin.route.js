@@ -11,5 +11,6 @@ router.post('/anonymousToOfficial', signInController.anonymousToOfficial);
 router.get('/logedInUser', signInController.logedInUser);
 router.post('/resetPassword', signInController.resetPassword);
 router.post('/sendResetPasswordEmail', signInController.sendResetPasswordEmail);
+router.post('/customJwt', signInController.customJwt);
 
 module.exports = router;

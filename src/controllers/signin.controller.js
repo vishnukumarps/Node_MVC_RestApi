@@ -5,17 +5,20 @@ const Realm = require("realm");
 const app = new Realm.App({ id: "application-0-cjmsl" });// vishnukumar5417@gmail.com
 const jwt_decode = require('jwt-decode');
 const res = require("express/lib/response");
-
+const jwt = require('jsonwebtoken')
 async function anonymousLogin(req, res, next) {
     // Create an anonymous credential
+
     const credentials = Realm.Credentials.anonymous();
     try {
         const user = await app.logIn(credentials);
+        var x = user.accessToken;
         var userObj = {
             id: user.id,
             identities: user.identities,
             state: user.state,
-            refreshToken: user.refreshToken
+            refreshToken: user.refreshToken,
+            accessToken: user.accessToken,
         }
         console.log("Successfully logged in!", user.id);
         console.dir(userObj);
@@ -201,7 +204,7 @@ async function sendResetPasswordEmail(req, res, next) {
     // }
 }
 
-async function  resetPassword(req, res, next) {
+async function resetPassword(req, res, next) {
     try {
         var resetDetails = {
             token: req.body.token,
@@ -220,6 +223,37 @@ async function  resetPassword(req, res, next) {
     }
 }
 
+async function customJwt(req, res, next) {
+    // Create a custom jwt credential
+    const jwt2 = jwt.sign(
+        { _id: 'abc123' },
+        'fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597',
+        { expiresIn: '7 days' }
+
+    );
+
+    console.log(jwt2);
+    const credentials = Realm.Credentials.jwt(jwt2);
+    console.log(credentials);
+    try {
+        const user = await app.logIn(credentials);
+        console.log(user)
+        //user.customData();
+        var outObj = {
+            id: user.id,
+            email: user.profile.email,
+            identities: user.identities,
+            state: user.state,
+            refreshToken: user.refreshToken,
+            authtoken: user.authtoken
+        }
+
+        console.log("Successfully logged in!", user.id);
+        res.send(user);
+    } catch (err) {
+        console.error("Failed to log in", err.message);
+    }
+}
 
 module.exports = {
     anonymousLogin,
@@ -229,5 +263,6 @@ module.exports = {
     logedInUser,
     logout,
     sendResetPasswordEmail,
-    resetPassword
+    resetPassword,
+    customJwt
 };
