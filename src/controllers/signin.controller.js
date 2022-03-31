@@ -2,7 +2,7 @@
 const Realm = require("realm");
 
 //const app = new Realm.App({ id: "" });//codeaffactions@gmail.com
-const app = new Realm.App({ id: "vishnutest-hnzpv" });// vishnukumar5417@gmail.com
+const app = new Realm.App({ id: "" });// vishnukumar5417@gmail.com
 //const app = new Realm.App({ id: "" });// Dedicated to spave-dev
 
 
@@ -302,6 +302,9 @@ async function linkAccounts(user, email, password) {
   async function  linkAccounts(request, res, next) {
 
     try {
+        var req=request;
+        var allUsers=await app.allUsers;
+        console.log(allUsers);
         email=request.body.email;
         password=request.body.password;
   
@@ -315,19 +318,18 @@ async function linkAccounts(user, email, password) {
          console.log(obj);
          await app.emailPasswordAuth.registerUser(
             {
-                email: request.body.email,
-                password: request.body.password
+                email: req.body.email,
+                password: req.body.password
             }
         );
         const emailPasswordUserCredentials = Realm.Credentials.emailPassword(
-            request.body.email,
-            request.body.password
+            req.body.email,
+            req.body.password
         );
-        const officialUser = await currentUser.linkCredentials(
+        await currentUser.linkCredentials(
             emailPasswordUserCredentials
         );
-
-        res.send(officialUser);
+          res.send(currentUser.refreshToken);
     } catch (error) {
         res.send(error.message);
     }
