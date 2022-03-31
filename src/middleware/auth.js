@@ -1,5 +1,5 @@
 const Realm = require("realm");
-const app = new Realm.App({ id: "hope-xggeh" });
+const app = new Realm.App({ id: "application-0-cjmsl" });
 const jwt_decode = require('jwt-decode');
 
 async function auth(req, res, next) {

@@ -1,8 +1,11 @@
 
 const Realm = require("realm");
 
-//const app = new Realm.App({ id: "hope-xggeh" });//codeaffactions@gmail.com
-const app = new Realm.App({ id: "application-0-cjmsl" });// vishnukumar5417@gmail.com
+//const app = new Realm.App({ id: "" });//codeaffactions@gmail.com
+const app = new Realm.App({ id: "" });// vishnukumar5417@gmail.com
+//const app = new Realm.App({ id: "" });// Dedicated to spave-dev
+
+
 const jwt_decode = require('jwt-decode');
 const res = require("express/lib/response");
 const jwt = require('jsonwebtoken')
@@ -79,6 +82,7 @@ async function login(req, res, next) {
             req.body.email,
             req.body.password
         );
+        // user.
         const user = await app.logIn(credentials);
         var token = user.refreshToken;
         var decoded = jwt_decode(token);
@@ -113,6 +117,7 @@ async function anonymousToOfficial(req, res, next) {
             state: anonymousUser.state,
             refreshToken: anonymousUser.refreshToken
         }
+       // res.send(anonymousObj);
         console.log("Current Anonymoususer" + anonymousObj);
         // const anonymousUser = await app.logIn(Realm.Credentials.anonymous());
         // console.log("Successfully logged in!", anonymousUser.id);
@@ -216,6 +221,8 @@ async function resetPassword(req, res, next) {
         var result = await app.emailPasswordAuth.resetPassword(
             resetDetails
         );
+
+        //app.emailPasswordAuth.confirmUser();
         res.send("Password reset successfully");
     } catch (error) {
         console.log(error.message);
@@ -225,8 +232,10 @@ async function resetPassword(req, res, next) {
 
 async function customJwt(req, res, next) {
     // Create a custom jwt credential
+
+
     const jwt2 = jwt.sign(
-        { _id: 'abc123' },
+        { _id: 'abc123', sub: "fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597", aud: "fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597", name: "test", email: "test@gmail.com", },
         'fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597',
         { expiresIn: '7 days' }
 
@@ -255,6 +264,76 @@ async function customJwt(req, res, next) {
     }
 }
 
+async function confirmUser(req, res, next) {
+    //res.send(req.query.token);
+   // console.log(req);
+  try {
+        console.log("confirmUser");
+    var resetDetails = {
+        token: req.query.token,
+        tokenId:req.query.tokenId,
+       
+    }
+    console.log(resetDetails);
+
+    var result = await app.emailPasswordAuth.confirmUser(
+        resetDetails
+    );
+    console.log(result);
+    res.send("User confirmed successfully");
+  } catch (error) {
+      
+  }
+}
+
+async function linkAccounts(user, email, password) {
+    const emailPasswordUserCredentials = Realm.Credentials.emailPassword(
+      email,
+      password
+    );
+    const linkedAccount = await user.linkCredentials(
+      emailPasswordUserCredentials
+    );
+    return linkedAccount;
+  }
+
+
+
+  async function  linkAccounts(request, res, next) {
+
+    try {
+        email=request.body.email;
+        password=request.body.password;
+  
+         const currentUser =await app.allUsers[request.body.userId];
+         var obj={
+                id:currentUser.id,
+                token:currentUser.authtoken,
+                re:currentUser.refreshToken
+           }  
+       
+         console.log(obj);
+         await app.emailPasswordAuth.registerUser(
+            {
+                email: request.body.email,
+                password: request.body.password
+            }
+        );
+        const emailPasswordUserCredentials = Realm.Credentials.emailPassword(
+            request.body.email,
+            request.body.password
+        );
+        const officialUser = await currentUser.linkCredentials(
+            emailPasswordUserCredentials
+        );
+
+        res.send(officialUser);
+    } catch (error) {
+        res.send(error.message);
+    }
+
+  }
+
 module.exports = {
     anonymousLogin,
     signup,
@@ -264,5 +343,8 @@ module.exports = {
     logout,
     sendResetPasswordEmail,
     resetPassword,
-    customJwt
+    customJwt,
+    confirmUser,
+   linkAccounts
+
 };

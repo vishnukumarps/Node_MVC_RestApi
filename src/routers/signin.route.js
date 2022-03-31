@@ -12,5 +12,6 @@ router.get('/logedInUser', signInController.logedInUser);
 router.post('/resetPassword', signInController.resetPassword);
 router.post('/sendResetPasswordEmail', signInController.sendResetPasswordEmail);
 router.post('/customJwt', signInController.customJwt);
-
+router.get('/confirmUser', signInController.confirmUser);
+router.post('/linkAccounts', signInController.linkAccounts);
 module.exports = router;
