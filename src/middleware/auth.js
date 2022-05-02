@@ -26,6 +26,21 @@ async function auth(req, res, next) {
 
 }
 
+async function authAdmin1(req, res, next) {
+    console.log("authAdmin1");
+    if(true){
+        next();
+    }
+}
+
+async function authAdmin2(req, res, next) {
+    console.log("authAdmin2");
+    if(true){
+        next();
+    }
+}
 module.exports = {
-    auth
+    auth,
+    authAdmin1,
+    authAdmin2
 }
