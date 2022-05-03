@@ -3,7 +3,9 @@ const mongoose= require('mongoose')
 const bookRouter=require('../src/routers/book.routes')
 const feedbackRouter=require('../src/routers/feedback.routes')
 const signInRouter=require('../src/routers/signin.route')
+const userRouter=require('../src/routers/user.routes')
 const cors = require('cors');
+const { User } = require('realm')
 
 const app = express()
 const port =  process.env.PORT |3000
@@ -25,6 +27,8 @@ mongoose.Promise = global.Promise;
 app.use('/book',bookRouter);
 app.use('/feedback',feedbackRouter);
 app.use('/signin',signInRouter);
+app.use('/user',userRouter);
+app.use(express.json());
 app.use(cors({
     origin: '*'
 }));

@@ -3,7 +3,7 @@ const Realm = require("realm");
 
 //const app = new Realm.App({ id: "" });//codeaffactions@gmail.com
 // const app = new Realm.App({ id: "vishnutest-hnzpv" });// vishnukumar5417@gmail.com
-const app = new Realm.App({ id: "" });// vishnukumar5417@gmail.com
+const app = new Realm.App({ id: "tasktracker-yemzw" });// vishnukumar5417@gmail.com
 //const app = new Realm.App({ id: "" });// Dedicated to spave-dev
 
 
@@ -292,10 +292,19 @@ async function chanagePassword(req, res, next) {
 
 async function customJwt(req, res, next) {
     // Create a custom jwt credential
+    const {ObjectId} = require('mongodb'); 
+    const id = new ObjectId(); // No argument
 
+    // const jwt2 = jwt.sign(
+    
+    //     { _id: 'abc123', sub: "fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597", aud: "tasktracker-yemzw", name: "test2" },
+    //     'fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597',
+    //     { expiresIn: '7 days' }
 
+    // );
     const jwt2 = jwt.sign(
-        { _id: 'abc123', sub: "fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597", aud: "fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597", name: "test", email: "test@gmail.com", },
+    
+        {  sub: id, aud: "tasktracker-yemzw"},
         'fb2fadce-e68e-4bc1-bee8-0a7b4d7c8597',
         { expiresIn: '7 days' }
 
@@ -308,17 +317,25 @@ async function customJwt(req, res, next) {
         const user = await app.logIn(credentials);
         console.log(user)
         //user.customData();
-        var outObj = {
-            id: user.id,
-            email: user.profile.email,
-            identities: user.identities,
-            state: user.state,
-            refreshToken: user.refreshToken,
-            authtoken: user.authtoken
-        }
+        // var outObj = {
+        //     id: user.id,
+        //     email: user.profile.email,
+        //     identities: user.identities,
+        //     state: user.state,
+        //     refreshToken: user.refreshToken,
+        //     authtoken: user.authtoken,
+        //     msg: user.id + " is successfully logged in",
+        //     objectId: id
+        // }
 
         console.log("Successfully logged in!", user.id);
-        res.send(user);
+        userObj={
+            userId: user.id,
+            objectIdOrSub: id,
+            token: user.accessToken,
+            refreshToken: user.refreshToken,
+        }
+        res.send(userObj);
     } catch (err) {
         console.error("Failed to log in", err.message);
     }
@@ -727,6 +744,39 @@ async function callAPI(req, res, next) {
 }
 
 
+async function getAllusers(req, res, next) {
+
+    let usersList=[];
+    for (const userId in app.allUsers) {
+        const user = app.allUsers[userId];
+        console.log(
+          `User with id ${user.id} is ${
+            user.isLoggedIn ? "logged in" : "logged out"
+          }`
+         
+
+        );
+      }
+
+      res.send(app.allUsers);
+//     // Get some logged-in users
+// const authenticatedUsers = Object.values(app.allUsers).filter(
+//     (user) => user.isLoggedIn
+//   );
+//   const user1 = authenticatedUsers[0];
+//   const user2 = authenticatedUsers[1];
+  
+//   // Switch to user1
+//   app.switchUser(user1);
+//   // The active user is now user1
+//   console.assert(app.currentUser.id === user1.id);
+//   // Switch to user2
+//   app.switchUser(user2);
+//   // The active user is now user2
+//   console.assert(app.currentUser.id === user2.id);
+  
+}
+
 module.exports = {
     anonymousLogin,
     signup,
@@ -746,6 +796,7 @@ module.exports = {
     emailTest,
     gmailTest,
     gmailTest3,
-    callAPI
+    callAPI,
+    getAllusers
 
 };
