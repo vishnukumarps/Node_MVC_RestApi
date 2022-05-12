@@ -100,7 +100,8 @@ async function login(req, res, next) {
             email: user.profile.email,
             identities: user.identities,
             state: user.state,
-            token: token,
+            refreshtoken: token,
+            accessToken: user.accessToken,
             decoded: decoded,
             msg: user.profile.email + " is successfully logged in"
         }
@@ -191,19 +192,24 @@ async function logout(req, res, next) {
 
 async function logoutUser(request, res, next) {
     try {
-        var allUsers = await app.allUsers;
-        const currentUser = await app.allUsers[request.body.userId];
-        console.log("Current User" + currentUser);
+      //  var allUsers =await app.allUsers;
+        //console.log("allUsers", allUsers);
+        const currentUser1 = await app.allUsers[request.body.userId]
+        console.log("Current User" + currentUser1);
         var userObj = {}
-        if (currentUser) {
-            if (currentUser.state == "LoggedIn") {
-                await app.currentUser.logOut();
+        if (currentUser1) {
+            if (currentUser1.state == "LoggedIn") {
+                //await app.currentUser.logOut();
+                currentUser1 .logOut();
                 console.log("Successfully logged out!");
-                userObj.state = currentUser.state;
+                userObj.state = currentUser1.state;
                 res.send(userObj);
             }
         }
-        res.send(request.body.userId + "  user is not logged in");
+        else{
+            res.send(request.body.userId + "  user is not logged in");
+        }
+      
 
 
     } catch (err) {
