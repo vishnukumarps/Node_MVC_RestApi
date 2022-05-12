@@ -188,6 +188,10 @@ async function resetPasswordByTokenAndTokenIdNewPassword(req, res, next) {
         res.send(error.message);
     }
 }
+
+async function logout(req, res, next) {
+
+}
 module.exports = {
     signup,
     resendConfirmationEmail,
