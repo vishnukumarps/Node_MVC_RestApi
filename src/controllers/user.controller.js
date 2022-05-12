@@ -1,5 +1,6 @@
 const Realm = require("realm");
-const app = new Realm.App({ id: "tasktracker-yemzw" });
+// const app = new Realm.App({ id: "tasktracker-yemzw" });
+const app = new Realm.App({ id: "passwordresetapp-ylqjh" });
 
 
 async function signup(req, res, next) {
@@ -73,14 +74,15 @@ async function sendPasswordResetEmail(req, res, next) {
         const email = req.body.email;
         // The new password to use
         const password = req.body.password;
-            const args = [{requestId:"726ba503cf864e4097fe17537"}];
-            await app.emailPasswordAuth.callResetPasswordFunction(
-                { email, password },
-                args
-            );
-            res.send("email sent");
-        }
-        catch (error) {
+        var method=req.body.method;
+        const args = [{ requestId: "726ba503cf864e4097fe17537" },{method:method}];
+        await app.emailPasswordAuth.callResetPasswordFunction(
+            { email, password },
+            args
+        );
+        res.send("ok");
+    }
+    catch (error) {
         next(error.message);
         res.send(error);
     }
@@ -103,18 +105,19 @@ async function resendPasswordResetEmail(req, res, next) {
     }
 }
 
-async function  sendTestEmail(req, res, next) {
+async function sendTestEmail(req, res, next) {
     var nodeoutlook = require('nodejs-nodemailer-outlook')
+    console.log(req.body.message);
     nodeoutlook.sendEmail({
         auth: {
             user: "vishnukumar.ps@outlook.com",
             pass: "thriller1!"
         },
         from: 'vishnukumar.ps@outlook.com',
-        to: 'vishnukumar5417@gmail.com',
-        subject: 'Hey you, awesome!',
-        html: '<b>This is bold text</b>',
-        text: 'This is text version!',
+        to: req.body.toAddress,
+        subject: req.body.subject,
+        html: `<b>${req.body.message}</b>`,
+        text: req.body.message,
         //replyTo: 'receiverXXX@gmail.com',
         // attachments: [
         //                     {
@@ -167,6 +170,8 @@ async function  sendTestEmail(req, res, next) {
 
 
     );
+
+    res.send("email sent");
 }
 
 
@@ -189,8 +194,57 @@ async function resetPasswordByTokenAndTokenIdNewPassword(req, res, next) {
     }
 }
 
-async function logout(req, res, next) {
+async function logout(request, res, next) {
+    try {
+        const currentUser1 = await app.allUsers[request.body.userId]
+        console.log("Current User" + currentUser1);
+        var userObj = {}
+        if (currentUser1) {
+            if (currentUser1.state == "LoggedIn") {
+                //await app.currentUser.logOut();
+                currentUser1.logOut();
+                console.log("Successfully logged out!");
+                userObj.state = currentUser1.state;
+                res.send(userObj);
+            }
+        }
+        else {
+            res.send(request.body.userId + "  user is not logged in");
+        }
+    } catch (err) {
+        console.error("Failed to log out", err.message);
+        res.send("failed to log out" + err.message);
+    }
+}
 
+async function login(req, res, next) {
+    try {
+        const credentials = Realm.Credentials.emailPassword(
+            req.body.email,
+            req.body.password
+        );
+     
+        const user = await app.logIn(credentials);
+        var token = user.refreshToken;
+       
+        console.log(token);
+        console.log("Successfully logged in!", user.id);
+        var userObj = {
+            id: user.id,
+            email: user.profile.email,
+            identities: user.identities,
+            state: user.state,
+            refreshtoken: token,
+            accessToken: user.accessToken,
+            msg: user.profile.email + " is successfully logged in"
+        }
+        user.id
+        console.dir(userObj);
+        res.send(userObj);
+    } catch (error) {
+        console.log(error.message);
+        res.send(error.message);
+    }
 }
 module.exports = {
     signup,
@@ -198,11 +252,12 @@ module.exports = {
     // signin,
     // confirmUser,
     sendPasswordResetEmail,
-     resendPasswordResetEmail,
+    resendPasswordResetEmail,
     // resetPassword,
     // forgotPassword,
     // changePassword
-     sendTestEmail,
-     resetPasswordByTokenAndTokenIdNewPassword,
-     logout
+    sendTestEmail,
+    resetPasswordByTokenAndTokenIdNewPassword,
+    login,
+    logout
 }

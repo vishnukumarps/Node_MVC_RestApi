@@ -9,5 +9,7 @@ router.post('/resendPasswordResetEmail',  userController.resendPasswordResetEmai
 router.post('/sendPasswordResetEmail',  userController.sendPasswordResetEmail);
 router.post('/resetPasswordByTokenAndTokenIdNewPassword',  userController.resetPasswordByTokenAndTokenIdNewPassword);
 router.post('/logout',  userController.logout);
+router.post('/login',  userController.login);
+router.post('/sendTestEmail',  userController.sendTestEmail);
 
 module.exports = router;
