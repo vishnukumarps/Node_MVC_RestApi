@@ -74,8 +74,8 @@ async function sendPasswordResetEmail(req, res, next) {
         const email = req.body.email;
         // The new password to use
         const password = req.body.password;
-        var method=req.body.method;
-        const args = [{ requestId: "726ba503cf864e4097fe17537" },{method:method}];
+        var method = req.body.method;
+        const args = [{ requestId: "726ba503cf864e4097fe17537" }, { method: method }];
         await app.emailPasswordAuth.callResetPasswordFunction(
             { email, password },
             args
@@ -84,7 +84,7 @@ async function sendPasswordResetEmail(req, res, next) {
     }
     catch (error) {
         next(error.message);
-        res.send(error);
+        res.send(error.message);
     }
 }
 
@@ -223,10 +223,10 @@ async function login(req, res, next) {
             req.body.email,
             req.body.password
         );
-     
+
         const user = await app.logIn(credentials);
         var token = user.refreshToken;
-       
+
         console.log(token);
         console.log("Successfully logged in!", user.id);
         var userObj = {
@@ -246,8 +246,32 @@ async function login(req, res, next) {
         res.send(error.message);
     }
 }
+
+async function sms(req, res, next) {
+
+    var userName = "hostel123";
+    var userPassword = "1234567";
+    var msgRecepient = "7736177715";
+    var msgText = "This is a demo msg please ignore!";
+    var url2 = "http://198.24.149.4/API/pushsms.aspx?loginID=" + userName + "&password=" + userPassword + "&mobile=" + msgRecepient + "&text=" + msgText + "&senderid=CHPSMS&route_id=2&Unicode=0";
+
+    var axiosObj = require('axios');
+    console.log("datat")
+    var config = {
+        method: 'get',
+        url: url2,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    let response = await axiosObj(config);
+    console.log(response);
+    res.send(response)
+
+}
 module.exports = {
     signup,
+    sms,
     resendConfirmationEmail,
     // signin,
     // confirmUser,

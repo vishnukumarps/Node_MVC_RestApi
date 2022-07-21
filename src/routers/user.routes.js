@@ -11,5 +11,6 @@ router.post('/resetPasswordByTokenAndTokenIdNewPassword',  userController.resetP
 router.post('/logout',  userController.logout);
 router.post('/login',  userController.login);
 router.post('/sendTestEmail',  userController.sendTestEmail);
+router.get('/sms',  userController.sms);
 
 module.exports = router;

@@ -152,3 +152,88 @@ exports = async ({ token, tokenId, username, password }, arg) => {
     let response = await axiosObj(config);
 
 };
+//end of snippet
+
+
+
+
+exports = async ({ token, tokenId, username, password }, arg) => {
+    try {
+
+        var userObj = {
+            msg: "password reset " + username,
+            token: token,
+            tokenId: tokenId,
+            username: username,
+            password: password,
+            requestId: arg[0].requestId,
+            operation: arg[1].operation
+        }
+        const cluster = context.services.get("mongodb-atlas");
+        const users = cluster.db("tracker").collection("passwordReset");
+        var x = users.insertOne({
+            ...userObj
+        });
+
+        if (arg[1].method == "CHANGEPASSWORD") {
+            return { status: 'success' };
+        }
+        if (arg[1].method == "RESETPASSWORD") {
+            var firstName = arg[2].firstName;
+            // email send code
+            var axiosObj = require('axios');
+            var data = JSON.stringify({
+                token: token,
+                tokenId: tokenId,
+                email: username,
+                firstName: firstName
+            });
+            var config = {
+                method: 'post',
+                url: 'https://spave-dev.livegivesave.com/v2/notification/resetPasswordMail',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'requestId': userObj.requestId
+                },
+                data: data
+            };
+            let response = await axiosObj(config);
+            return { status: 'pending' }
+        }
+        return { status: 'fail' };
+    } catch (error) {
+        return { status: 'fail' };
+    }
+
+};
+//end
+
+
+
+exports = function (changeEvent) {
+
+    const data = JSON.stringify(changeEvent.fullDocument);
+    if (data.status === false) {
+        var dataObj={
+            status:false,
+            message:"error",
+            maiil:"Mail send"
+        }
+        const cluster = context.services.get("mongodb-atlas");
+        const users = cluster.db("tracker").collection("passwordReset");
+        var x = users.insertOne({
+            ...dataObj
+        });
+
+    }
+    //mail sending
+};
+
+
+text: 'hiii',
+
+
+
+    onError: (e) => console.log(e),
+        onSuccess: (i) => console.log(i)
+});
