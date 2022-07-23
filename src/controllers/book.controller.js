@@ -1,5 +1,6 @@
 const Book = require('../models/book')
-
+const {pdfHelperService}= require('../helper')
+const {test2}=require('../helper/pdfHelper')
 var books = [{ "name": "book1" }];
 const get = async (req, res, next) => {
     res.send(books)
@@ -8,6 +9,7 @@ const get = async (req, res, next) => {
 
 const post = async (req, res, next) => {
     try {
+        pdfHelperService.test();
         const newBook = new Book({
             ...req.body
         })
