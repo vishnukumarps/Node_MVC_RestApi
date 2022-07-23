@@ -1,3 +1,11 @@
 {
-    "workbench.colorTheme": "Winter is Coming (Dark Blue - No Italics)"
+    "workbench.colorTheme": "Egoist One",
+    "workbench.colorCustomizations": {
+        "tab.activeBackground": "#00000083"
+    },
+    // "editor.snippetSuggestions": "top",
+    
+    // "editor.showFoldingControls": "always",
+    // "editor.folding": true,
+    // "editor.foldingStrategy": "indentation",
 }

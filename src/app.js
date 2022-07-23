@@ -4,6 +4,7 @@ const bookRouter=require('../src/routers/book.routes')
 const feedbackRouter=require('../src/routers/feedback.routes')
 const signInRouter=require('../src/routers/signin.route')
 const userRouter=require('../src/routers/user.routes')
+const {dbtroutes}= require('../src/routers')
 const cors = require('cors');
 const { User } = require('realm')
 
@@ -28,6 +29,7 @@ app.use('/book',bookRouter);
 app.use('/feedback',feedbackRouter);
 app.use('/signin',signInRouter);
 app.use('/user',userRouter);
+app.use('/dbt',dbtroutes)
 app.use(express.json());
 app.use(cors({
     origin: '*'

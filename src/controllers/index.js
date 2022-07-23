@@ -1,0 +1,1 @@
+module.exports.dbtController=require('./doubts.controller')
