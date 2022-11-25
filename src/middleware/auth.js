@@ -9,9 +9,9 @@ async function auth(req, res, next) {
         console.log("decoded", decoded.sub);
         var userId = decoded.sub;
 
-        var currentUser = await app.currentUser;
-        console.log("currentUser", currentUser.id);
-        if (currentUser.id == userId) {
+        const loggedInUserAll = await app.allUsers;
+        console.log('allUsers',loggedInUserAll);
+        if (loggedInUser != undefined && loggedInUser.id == userId) {
             console.log("user is authenticated");
             next();
         }
