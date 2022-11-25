@@ -11,6 +11,8 @@ async function auth(req, res, next) {
 
         const loggedInUserAll = await app.allUsers;
         console.log('allUsers',loggedInUserAll);
+        const loggedInUser = await app.allUsers[userId];
+        
         if (loggedInUser != undefined && loggedInUser.id == userId) {
             console.log("user is authenticated");
             next();

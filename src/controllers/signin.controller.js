@@ -32,7 +32,7 @@ async function anonymousLogin(req, res, next) {
     }
 }
 
-async function signup(req, res, next) {
+async function signup(req, res, next) { //API 1
 
     try {
         await app.emailPasswordAuth.registerUser(
@@ -76,7 +76,7 @@ async function logedInUser(req, res, next) {
     res.send(resultObj);
 }
 
-async function login(req, res, next) {
+async function login(req, res, next) {  // API 2
     try {
         const credentials = Realm.Credentials.emailPassword(
             req.body.email,
@@ -334,6 +334,11 @@ async function linkAccounts(user, email, password) {
 
   }
 
+  async function test(request, res, next)){
+
+     res.send("ok")
+  }
+
 module.exports = {
     anonymousLogin,
     signup,
@@ -345,6 +350,7 @@ module.exports = {
     resetPassword,
     customJwt,
     confirmUser,
-   linkAccounts
+   linkAccounts,
+   test
 
 };
